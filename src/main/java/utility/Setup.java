@@ -1,6 +1,6 @@
 package utility;
 
-import java.io.IOException;
+import java.util.HashMap;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,16 +9,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import runner.TestRunner;
 
-public class Setup extends ConfigReader{
+public class Setup extends TestRunner{
+	
+	
 	String url,browser;
+	public HashMap<String, String> cartContents=new HashMap<String, String>();
+	ConfigReader cr=new ConfigReader();
+	
 	public Setup()  {
 		super();
-		url=getProperty("url");
-		browser=getProperty("browser");
+		url=cr.getProperty("url");
+		browser=cr.getProperty("browser");
 	}
 
-	public static WebDriver driver;
+	
 	public WebDriver setupDriver() {
 		switch(browser) {
 		case "Chrome":
@@ -48,9 +54,7 @@ public class Setup extends ConfigReader{
 		driver.get(url);
 	}
 
-	public void tearDown() {
-		// TODO Auto-generated method stub
-		driver.close();
-		driver.quit();
-	}
+	
+	
+	
 }

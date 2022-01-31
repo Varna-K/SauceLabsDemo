@@ -10,8 +10,9 @@ import pages.CheckOutCompletionPage;
 import pages.FinalCheckout;
 import pages.Information;
 import runner.TestRunner;
+import utility.Setup;
 
-public class CheckoutStepDefinition extends TestRunner {
+public class CheckoutStepDefinition extends TestRunner{
 
 	@When("^I proceed to checkout")
 	public void iProceedToCheckout() throws Throwable {			

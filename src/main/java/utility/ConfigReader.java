@@ -7,6 +7,7 @@ import java.util.Properties;
 public class ConfigReader {
 	private Properties prop=new Properties();
 	
+	
 	public ConfigReader() {
 		FileReader fr;
 		try {

@@ -1,9 +1,7 @@
 package stepDefinition;
 
 import java.util.Collection;
-import java.util.List;
 
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
@@ -15,7 +13,7 @@ import runner.TestRunner;
 
 public class InventoryStepDefinition extends TestRunner {
 
-	@And("^I select the \"([^\"]*)\" from the inventory")
+	@And("^I add the \"([^\"]*)\" to the inventory")
 	public void iSelectTheFromTheInventory(String itemName) throws Throwable {
 		InventoryPage inv=PageFactory.initElements(driver, InventoryPage.class);
 		if(driver.getCurrentUrl().contains("cart")) {
