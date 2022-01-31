@@ -9,8 +9,8 @@ Feature: Checkout Scenarios for Sauce Labs
   Scenario: Scenario1_Select and checkout   
     And I select the "Sauce Labs Bolt T-Shirt" from the inventory
     And I select the "Sauce Labs Onesie" from the inventory
-    When I proceed to checkout
     Then I confirm the cart contents
+    When I proceed to checkout
     Then I should see checkout completion page
     
   @RemoveAndCheckout

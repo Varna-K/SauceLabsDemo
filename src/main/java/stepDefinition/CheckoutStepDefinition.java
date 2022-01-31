@@ -16,6 +16,7 @@ public class CheckoutStepDefinition extends TestRunner {
 	@When("^I proceed to checkout")
 	public void iProceedToCheckout() throws Throwable {			
 		CartPage cart=PageFactory.initElements(driver, CartPage.class);
+		cart.verifyProducts(cartContents);
 		cart.checkoutButton.click();
 		Information inf=PageFactory.initElements(driver, Information.class);
 		inf.typeText(inf.firstName, "ABC");

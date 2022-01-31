@@ -1,12 +1,15 @@
 package pages;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,7 +18,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class InventoryPage extends LoginPage{
 	public Map<String,Integer> itemNames=new HashMap<String,Integer>();
-	public TreeMap<Double,String> sortPricesMap=new TreeMap<Double,String>();
+	public HashMap<String,Double> sortPricesMap=new HashMap<String,Double>();
 	public TreeSet<String> sortSet=new TreeSet<String>();
 	
 	
@@ -37,17 +40,23 @@ public class InventoryPage extends LoginPage{
 	@FindBy(id="continue-shopping")
 	public WebElement continueShopping;
 	
+	@FindBy(xpath="//div[@class='pricebar']/button")
+	public List<WebElement> addRemoveButtons;
+	
 	public InventoryPage(WebDriver driver) {
 		super(driver);		
 	}
 	
-	public void addItemToCart(String name) {	
-		for( WebElement elem:addToCartButtons) {
+	public int addItemToCart(String name) {	
+		int i=0;
+		for( WebElement elem:addRemoveButtons) {
 			if(elem.getAttribute("id").contains(name.replace(" ", "-").toLowerCase())) {
-				elem.click();
+				i=addRemoveButtons.indexOf(elem);
+				elem.click();				
 				break;
 			}					
-		}		
+		}
+		return i;
 	}
 
 	public void sortProducts(String sortValue) {
@@ -64,8 +73,10 @@ public class InventoryPage extends LoginPage{
 	public void addItemToCart(int arg1) {
 		int i=0;
 		while( i<arg1) {
-			addToCartButtons.get(i).click();		
-			}					
+			addRemoveButtons.get(i).click();
+			i++;
+			
+			}				
 		}
 
 	
@@ -83,19 +94,28 @@ public class InventoryPage extends LoginPage{
 			int i=0;		
 			for(WebElement elem:inventoryItemNames) {
 				Double price=Double.parseDouble(inventoryItemPrices.get(i).getText().replace("$", ""));
-				sortPricesMap.put(price, elem.getText());
+				sortPricesMap.put( elem.getText(),price);
 				i++;
 			}
-			System.out.println(sortPricesMap);
-			sortList= sortPricesMap.values();
+			
+			HashMap<String, Double> temp
+            = sortPricesMap.entrySet()
+                  .stream()
+			.sorted(Map.Entry.<String, Double>comparingByValue()
+                  //  .reversed()
+            .thenComparing(Map.Entry.comparingByKey()))
+			.collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (e1, e2) -> e1, LinkedHashMap::new));
+						
+			sortList= temp.keySet();
 			break;
 		}
 		default:{
 			for(WebElement elem:inventoryItemNames) {
-				sortList.add(elem.getText());
-				System.out.println(sortList);
+				sortList.add(elem.getText());				
 			}
-			//System.out.println(sortList);
 			break;
 		}
 		}

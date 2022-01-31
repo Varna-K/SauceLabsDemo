@@ -1,9 +1,11 @@
 package stepDefinition;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.List;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -19,16 +21,21 @@ public class InventoryStepDefinition extends TestRunner {
 		if(driver.getCurrentUrl().contains("cart")) {
 			inv.continueShopping.click();
 		}		
-		inv.addItemToCart(itemName);
+		int index=inv.addItemToCart(itemName);
+		String prodPrice=inv.inventoryItemPrices.get(index).getText();
+		cartContents.put(itemName, prodPrice)	;	
+		
 	}
 
 	
 
 	@Then("I confirm the cart contents")
 	public void iConfirmTheCartContents() throws Throwable {
-		System.out.println("cart contents verified");
 		InventoryPage inv=PageFactory.initElements(driver, InventoryPage.class);
 		inv.cartButton.click();	
+		System.out.println("cart contents verified");
+		
+		
 	}
 
 
@@ -37,6 +44,7 @@ public class InventoryStepDefinition extends TestRunner {
 	public void iRemoveFromTheCart(String name) throws Throwable {
 		CartPage cart=PageFactory.initElements(driver, CartPage.class);
 		cart.removeItemFromCart(name);
+		cartContents.remove(name);
 	}
 
 
@@ -46,9 +54,15 @@ public class InventoryStepDefinition extends TestRunner {
 		InventoryPage inv=PageFactory.initElements(driver, InventoryPage.class);
 		Collection<String> expectedOrder = inv.verifyProductOrder("price");
 		inv.sortProducts("price");				
-		Collection<String> actualOrder = inv.verifyProductOrder(" ");
-		boolean b=expectedOrder.equals(actualOrder);
+		Collection<String> actualOrder = inv.verifyProductOrder(" ");//product order as seen on page
+		Assert.assertTrue(expectedOrder.equals(actualOrder));
 		inv.addItemToCart(arg1);
+		int i=0;
+		while(i<arg1) {			
+			String prodPrice=inv.inventoryItemPrices.get(i).getText();
+			cartContents.put(inv.inventoryItemNames.get(i).getText(), prodPrice)	;	
+			i++;
+		}
 	}
 	
 }
