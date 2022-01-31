@@ -35,7 +35,7 @@ public class TestRunner  {
 	
 	@AfterClass
 	public static void tearDown() {
-		//set.tearDown();
+		set.tearDown();
 	}
 
 }
