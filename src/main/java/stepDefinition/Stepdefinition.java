@@ -27,6 +27,6 @@ public class Stepdefinition extends TestRunner{
 		if (scenario.isFailed()) {
 			Shutterbug.shootPage(driver, Capture.FULL_SCROLL).save();
 		}
-		//driver.quit();
+		driver.quit();
 	}
 }

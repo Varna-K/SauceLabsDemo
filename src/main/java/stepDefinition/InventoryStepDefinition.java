@@ -1,10 +1,12 @@
 package stepDefinition;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import pages.CartPage;
@@ -47,7 +49,17 @@ public class InventoryStepDefinition extends TestRunner {
 
 
 
-	@And("^I select (\\d+) lowest priced products$")
+	@Then("I remove the product from the cart")
+	public void iRemoveTheProductFromTheCart(DataTable dt) throws Throwable {
+		List<List<String>> data=dt.asLists();
+		CartPage cart=PageFactory.initElements(driver, CartPage.class);
+		for(String itemName:data.get(0)) {
+		cart.removeItemFromCart(itemName);
+		cartContents.remove(itemName);
+		}
+	}
+
+	@And("I select (\\d+) lowest priced products$")
 	public void iSelectLowestPricedProducts(int arg1) throws Throwable {
 		InventoryPage inv=PageFactory.initElements(driver, InventoryPage.class);
 		Collection<String> expectedOrder = inv.verifyProductOrder("price");
@@ -61,6 +73,25 @@ public class InventoryStepDefinition extends TestRunner {
 			cartContents.put(inv.inventoryItemNames.get(i).getText(), prodPrice)	;	
 			i++;
 		}
+	}
+
+
+
+	@And("I add the products to inventory")
+	public void iAddTheProductsToInventory(DataTable dt) throws Throwable {
+		List<List<String>> data=dt.asLists();
+		InventoryPage inv=PageFactory.initElements(driver, InventoryPage.class);
+		if(driver.getCurrentUrl().contains("cart")) {
+			inv.continueShopping.click();
+		}		
+		for(String itemName:data.get(0)) {
+		int index=inv.addItemToCart(itemName);
+		String prodPrice=inv.inventoryItemPrices.get(index).getText();
+		cartContents.put(itemName, prodPrice)	;
+		}
+		
+		
+		
 	}
 	
 }

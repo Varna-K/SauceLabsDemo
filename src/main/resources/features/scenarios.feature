@@ -6,20 +6,22 @@ Feature: Checkout Scenarios for Sauce Labs
     When I login as a registered user
     
   @SimpleCheckout
-  Scenario: Scenario1_Select and checkout   
-    And I add the "Sauce Labs Bolt T-Shirt" to the inventory
-    And I add the "Sauce Labs Onesie" to the inventory
+  Scenario: Scenario1_Select and checkout 
+  	And I add the products to inventory
+  	|Sauce Labs Bolt T-Shirt|Sauce Labs Onesie|
     Then I confirm the cart contents
     When I proceed to checkout
     Then I should see checkout completion page
     
   @RemoveAndCheckout
    Scenario: Scenario2_Remove and checkout   
-    And I add the "Sauce Labs Bolt T-Shirt" to the inventory
-    And I add the "Sauce Labs Bike Light" to the inventory
+   	And I add the products to inventory
+  	|Sauce Labs Bolt T-Shirt|Sauce Labs Bike Light|
     Then I confirm the cart contents
-    Then I remove "Sauce Labs Bike Light" from the cart
-    Then I add the "Sauce Labs Backpack" to the inventory
+    Then I remove the product from the cart
+    |Sauce Labs Bike Light|
+    And I add the products to inventory
+  	|Sauce Labs Backpack|    
     Then I confirm the cart contents
     When I proceed to checkout
     Then I should see checkout completion page
@@ -30,4 +32,4 @@ Feature: Checkout Scenarios for Sauce Labs
     Then I confirm the cart contents
     When I proceed to checkout
     Then I should see checkout completion page
-    
+
