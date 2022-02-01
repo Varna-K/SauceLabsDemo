@@ -32,4 +32,4 @@ Feature: Checkout Scenarios for Sauce Labs
     Then I confirm the cart contents
     When I proceed to checkout
     Then I should see checkout completion page
-    
+
